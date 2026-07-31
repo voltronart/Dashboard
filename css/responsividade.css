@@ -1,0 +1,400 @@
+/* ==========================================================
+   RESPONSIVIDADE.CSS
+   Ajustes de layout para telas pequenas, médias e grandes.
+   Cobre: dashboard (clientes, produtos, pedidos, financeiro)
+   e loja pública (vitrine + carrinho).
+   ========================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  max-width: 100%;
+}
+
+@media (min-width: 1400px) {
+  .conteudo,
+  .financeiro {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .produtos-section,
+  .hero,
+  .header-inner,
+  .footer-inner {
+    max-width: 1280px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .conteudo,
+  .financeiro {
+    padding: 24px 28px;
+  }
+
+  .grid,
+  .grid-produtos {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .cards-financeiro,
+  .cards-resumo {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-layout {
+    display: block;
+  }
+
+  .btn-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(82vw, 280px);
+    height: 100vh;
+    flex-direction: column;
+    padding: 16px;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform .28s ease;
+    overflow-y: auto;
+  }
+
+  .sidebar.aberta {
+    transform: translateX(0);
+  }
+
+  .sidebar-topo {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 0 0 12px 0;
+    margin-bottom: 12px;
+    white-space: normal;
+  }
+
+  .sidebar-nav {
+    flex-direction: column;
+    overflow: visible;
+    width: 100%;
+  }
+
+  .sidebar-rodape {
+    margin-top: auto;
+    padding-top: 12px;
+  }
+
+  .nav-link {
+    white-space: normal;
+    width: 100%;
+    text-align: left;
+  }
+
+  .overlay-menu {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .28s ease;
+  }
+
+  .overlay-menu.visivel {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .conteudo,
+  .financeiro {
+    padding: 16px;
+  }
+
+  .conteudo-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .conteudo-header h1 {
+    margin: 0;
+    font-size: 1.35rem;
+  }
+
+  .conteudo-header > :last-child {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .cards-financeiro,
+  .cards-resumo,
+  .grid,
+  .grid-produtos {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .card,
+  .card-produto,
+  .card-valor {
+    border-radius: 12px;
+  }
+
+  .tabela-padrao {
+    display: block;
+    overflow-x: visible;
+  }
+
+  .tabela-padrao thead {
+    display: none;
+  }
+
+  .tabela-padrao tbody {
+    display: block;
+  }
+
+  .tabela-padrao tr {
+    display: block;
+    background: #fff;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+
+  .tabela-padrao td {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border: 0;
+    text-align: right;
+    align-items: center;
+    overflow-wrap: anywhere;
+  }
+
+  .tabela-padrao td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: #6b7280;
+    text-align: left;
+    flex: 0 0 42%;
+  }
+
+  .tabela-padrao td:last-child {
+    display: grid;
+    gap: 8px;
+  }
+
+  .tabela-padrao td:last-child .botao-icone,
+  .tabela-padrao td:last-child button,
+  .botao-primario,
+  .botao-secundario {
+    width: 100%;
+  }
+
+  .botao-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px 12px;
+    width: auto;
+  }
+
+  .modal-box {
+    width: calc(100vw - 24px);
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 12px;
+    border-radius: 14px;
+  }
+
+  .modal-acoes {
+    display: grid;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+
+  .cards-financeiro,
+  .cards-resumo {
+    grid-template-columns: 1fr;
+  }
+
+  .card-valor {
+    font-size: 1.4rem;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding-top: 40px;
+  }
+
+  .hero-desc {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-stamp {
+    order: -1;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .grid,
+  .grid-produtos {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .card-produto-nome {
+    font-size: 1rem;
+  }
+
+  .card-produto-acoes {
+    flex-direction: column;
+  }
+
+  .input-quantidade {
+    width: 100%;
+  }
+
+  .cart-drawer-box {
+    width: 100%;
+  }
+
+  .carrinho-item {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    text-align: left;
+  }
+
+  .carrinho-item-qtd {
+    width: 70px;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-info {
+    text-align: center;
+  }
+}
+
+@media (max-width: 380px) {
+  .grid,
+  .grid-produtos {
+    grid-template-columns: 1fr;
+  }
+
+  .conteudo,
+  .financeiro {
+    padding: 14px;
+  }
+
+  .sidebar-topo h2 {
+    font-size: 0.95rem;
+  }
+
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+
+  .hero-stamp .stamp {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+@media (max-height: 480px) and (orientation: landscape) {
+  .modal-box {
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+
+  .intro {
+    display: none;
+  }
+
+  .cart-drawer-box {
+    overflow-y: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .card,
+  .card-produto,
+  .modal-box {
+    border-width: 0.5px;
+  }
+}
+
+.btn-menu {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .btn-menu {
+    display: inline-flex;
+  }
+}

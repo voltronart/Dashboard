@@ -1,0 +1,228 @@
+/* ===== Botões ===== */
+
+.botao-primario,
+.botao-secundario {
+  padding: 10px 18px;
+  border-radius: var(--raio-borda-sm);
+  border: none;
+  font-size: var(--fonte-tamanho-base);
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.botao-primario {
+  background-color: var(--cor-primaria);
+  color: var(--cor-texto-invertido);
+}
+
+.botao-primario:hover {
+  background-color: var(--cor-primaria-escura);
+}
+
+.botao-secundario {
+  background-color: var(--cor-superficie);
+  color: var(--cor-texto);
+  border: 1px solid var(--cor-borda);
+}
+
+.botao-secundario:hover {
+  background-color: var(--cor-fundo);
+}
+
+.botao-icone {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: var(--raio-borda-sm);
+  color: var(--cor-texto-suave);
+}
+
+.botao-icone:hover {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+.botao-icone.perigo:hover {
+  background-color: var(--cor-perigo-clara);
+  color: var(--cor-perigo);
+}
+
+/* select de filtro no header (ex: pedidos) */
+.conteudo-header select {
+  padding: 10px 12px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda-sm);
+  background-color: var(--cor-superficie);
+  color: var(--cor-texto);
+}
+
+/* ===== Tabelas ===== */
+
+.tabela-padrao {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-padrao thead {
+  background-color: var(--cor-fundo);
+}
+
+.tabela-padrao th {
+  text-align: left;
+  padding: 14px var(--espaco-lg);
+  font-size: var(--fonte-tamanho-pequeno);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--cor-texto-suave);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.tabela-padrao td {
+  padding: 14px var(--espaco-lg);
+  border-bottom: 1px solid var(--cor-borda);
+  font-size: var(--fonte-tamanho-base);
+}
+
+.tabela-padrao tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela-padrao tbody tr:hover {
+  background-color: var(--cor-fundo);
+}
+
+.tabela-padrao td.acoes {
+  display: flex;
+  gap: var(--espaco-xs);
+  align-items: center;
+}
+
+.tabela-vazia {
+  text-align: center;
+  padding: var(--espaco-xl);
+  color: var(--cor-texto-suave);
+}
+
+/* ===== Badges de status ===== */
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: var(--fonte-tamanho-pequeno);
+  font-weight: 600;
+}
+
+.badge-sucesso {
+  background-color: var(--cor-primaria-clara);
+  color: var(--cor-primaria-escura);
+}
+
+.badge-alerta {
+  background-color: var(--cor-alerta-clara);
+  color: var(--cor-alerta);
+}
+
+.badge-perigo {
+  background-color: var(--cor-perigo-clara);
+  color: var(--cor-perigo);
+}
+
+.badge-neutro {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto-suave);
+}
+
+/* ===== Cards (uso geral, ex: resumo/dashboard futuro) ===== */
+
+.card {
+  background-color: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  box-shadow: var(--sombra-card);
+  padding: var(--espaco-lg);
+}
+
+.card-titulo {
+  font-size: var(--fonte-tamanho-pequeno);
+  color: var(--cor-texto-suave);
+  margin-bottom: var(--espaco-xs);
+}
+
+.card-valor {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--cor-texto);
+}
+
+/* ===== Modais ===== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaco-lg);
+  z-index: 100;
+}
+
+.modal-overlay.escondido {
+  display: none;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--cor-superficie);
+  border-radius: var(--raio-borda);
+  box-shadow: var(--sombra-modal);
+  padding: var(--espaco-xl);
+}
+
+.modal-box h2 {
+  font-size: 18px;
+  margin-bottom: var(--espaco-md);
+}
+
+.modal-box form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-xs);
+}
+
+.modal-box label {
+  font-size: var(--fonte-tamanho-pequeno);
+  color: var(--cor-texto-suave);
+  margin-top: var(--espaco-sm);
+}
+
+.modal-box input,
+.modal-box select {
+  padding: 10px 12px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda-sm);
+  outline: none;
+}
+
+.modal-box input:focus,
+.modal-box select:focus {
+  border-color: var(--cor-primaria);
+}
+
+.modal-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--espaco-sm);
+  margin-top: var(--espaco-lg);
+}
+
+/* ===== Responsividade ===== */
+
+@media (max-width: 720px) {
+  .tabela-padrao th,
+  .tabela-padrao td {
+    padding: 10px var(--espaco-md);
+  }
+}

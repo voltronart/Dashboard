@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedidos - Jogi Hortaliças</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/variaveis.css">
+        <link rel="stylesheet" href="css/responsividade.css">
+
+
+</head>
+<body>
+    <div class="overlay-menu" id="overlay-menu"></div>
+
+
+  <div class="app-layout">
+ 
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-topo">
+        <h2>Jogi Hortaliças</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="clientes.html" class="nav-link">Clientes</a>
+        <a href="produtos.html" class="nav-link">Produtos</a>
+       <a href="financeiro.html" class="nav-link">Financeiro</a>
+        <a href="pedidos.html" class="nav-link ativo">Pedidos</a>
+      </nav>
+      <div class="sidebar-rodape">
+        <button id="btn-logout" class="nav-link">Sair</button>
+      </div>
+    </aside>
+
+    <main class="conteudo">
+      <header class="conteudo-header">
+                <button id="btn-menu" class="btn-menu" aria-label="Abrir menu">☰</button>
+
+        <h1>Pedidos</h1>
+        <select id="filtro-status">
+          <option value="">Todos os status</option>
+          <option value="pendente">Pendente</option>
+          <option value="em_preparo">Em preparo</option>
+          <option value="entregue">Entregue</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </header>
+
+      <section class="conteudo-corpo">
+        <table class="tabela-padrao">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Data</th>
+              <th>Itens</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-pedidos-body">
+            <!-- linhas geradas via JS -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/supabaseConfig.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/pedidos.js"></script>
+ <script>
+  const btnMenu = document.getElementById('btn-menu');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay-menu');
+
+  function abrirMenu() {
+    sidebar.classList.add('aberta');
+    overlay.classList.add('visivel');
+  }
+
+  function fecharMenu() {
+    sidebar.classList.remove('aberta');
+    overlay.classList.remove('visivel');
+  }
+
+  if (btnMenu && sidebar && overlay) {
+    btnMenu.addEventListener('click', () => {
+      const aberto = sidebar.classList.contains('aberta');
+      aberto ? fecharMenu() : abrirMenu();
+    });
+
+    overlay.addEventListener('click', fecharMenu);
+
+    document.querySelectorAll('.sidebar a, .sidebar button').forEach((item) => {
+      item.addEventListener('click', () => {
+        if (window.innerWidth <= 768) fecharMenu();
+      });
+    });
+  }
+</script>
+</body>
+</html>

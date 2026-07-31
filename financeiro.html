@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Financeiro</title>
+
+    <link rel="stylesheet" href="css/financeiro.css">
+    
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-topo">
+        <h2>Jogi Hortaliças</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="clientes.html" class="nav-link">Clientes</a>
+        <a href="produtos.html" class="nav-link">Produtos</a>
+        <a href="pedidos.html" class="nav-link">Pedidos</a>
+        <a href="financeiro.html" class="nav-link ativo">Financeiro</a>
+      </nav>
+      <div class="sidebar-rodape">
+        <button id="btn-logout" class="nav-link">Sair</button>
+      </div>
+    </aside>
+
+<main class="financeiro conteudo">
+
+    <!-- HEADER -->
+
+    <header class="conteudo-header">
+
+        <div>
+            <h1>Financeiro</h1>
+            <p>Controle das entradas e saídas.</p>
+        </div>
+
+        <div class="header-acoes">
+
+            <button class="botao-primario" id="btn-nova-movimentacao">
+                Nova Movimentação
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- RESUMO -->
+
+    <section class="cards-financeiro">
+
+        <article class="card">
+
+            <div class="card-titulo">
+                Receita
+            </div>
+
+            <div class="card-valor" id="resumo-receita">
+                R$ 0,00
+            </div>
+
+        </article>
+
+        <article class="card">
+
+            <div class="card-titulo">
+                Despesas
+            </div>
+
+            <div class="card-valor" id="resumo-despesas">
+                R$ 0,00
+            </div>
+
+        </article>
+
+        <article class="card">
+
+            <div class="card-titulo">
+                Lucro
+            </div>
+
+            <div class="card-valor" id="resumo-lucro">
+                R$ 0,00
+            </div>
+
+        </article>
+
+        <article class="card">
+
+            <div class="card-titulo">
+                Contas Pendentes
+            </div>
+
+            <div class="card-valor" id="resumo-pendentes">
+                R$ 0,00
+            </div>
+
+        </article>
+
+    </section>
+
+    <!-- TABELA -->
+
+    <section class="card">
+
+        <table class="tabela-padrao">
+
+            <thead>
+
+                <tr>
+
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Categoria</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="tabela-financeiro-body">
+
+                <!-- linhas geradas via JS -->
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+</main>
+
+</div>
+
+<!-- MODAL -->
+
+<div
+class="modal-overlay escondido"
+id="modalFinanceiro">
+
+    <div class="modal-box">
+
+        <h2>Nova Movimentação</h2>
+
+        <form id="form-movimentacao">
+
+            <label for="mov-descricao">Descrição</label>
+            <input type="text" id="mov-descricao" required>
+
+            <label for="mov-valor">Valor</label>
+            <input type="number" id="mov-valor" step="0.01" required>
+
+            <label for="mov-categoria">Categoria</label>
+
+            <select id="mov-categoria">
+
+                <option value="receita">Receita</option>
+                <option value="despesa" selected>Despesa</option>
+
+            </select>
+
+            <label for="mov-status">Status</label>
+
+            <select id="mov-status">
+
+                <option value="pago">Pago</option>
+                <option value="pendente" selected>Pendente</option>
+
+            </select>
+
+            <div class="modal-acoes">
+
+                <button
+                type="button"
+                class="botao-secundario"
+                id="btn-cancelar-movimentacao">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                type="submit"
+                class="botao-primario">
+
+                    Salvar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/utils.js"></script>
+<script src="js/supabaseConfig.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/financeiro.js"></script>
+
+</body>
+
+</html>
