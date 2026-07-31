@@ -3,7 +3,7 @@
 // ==========================================
 
 // 🔧 Troque essa URL quando souber o endereço final da loja publicada
-const URL_BASE_LOJA = "http://127.0.0.1:5500/loja/loja.html";
+const URL_BASE_LOJA = "https://voltronart.github.io/CardapioJogiHortalicas/";
 
 let clienteEditandoId = null;
 
