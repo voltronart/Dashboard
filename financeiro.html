@@ -52,6 +52,19 @@
 
     </header>
 
+    <!-- FILTRO DE PERÍODO -->
+
+    <section class="filtro-periodo" id="filtro-periodo">
+
+        <button class="botao-periodo" data-periodo="dia">Diário</button>
+        <button class="botao-periodo" data-periodo="semana">Semanal</button>
+        <button class="botao-periodo ativo" data-periodo="mes">Mensal</button>
+        <button class="botao-periodo" data-periodo="tudo">Tudo</button>
+
+        <span class="periodo-label" id="periodo-label"></span>
+
+    </section>
+
     <!-- RESUMO -->
 
     <section class="cards-financeiro">
@@ -158,6 +171,9 @@ id="modalFinanceiro">
 
             <label for="mov-valor">Valor</label>
             <input type="number" id="mov-valor" step="0.01" required>
+
+            <label for="mov-data">Data</label>
+            <input type="date" id="mov-data" required>
 
             <label for="mov-categoria">Categoria</label>
 
