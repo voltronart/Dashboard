@@ -112,6 +112,43 @@ body {
   align-items: center;
 }
 
+/* --- Filtro de período --- */
+
+.filtro-periodo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.botao-periodo {
+  background: #fff;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.botao-periodo:hover {
+  background: #F0F2F0;
+}
+
+.botao-periodo.ativo {
+  background: #4C7A3F;
+  border-color: #4C7A3F;
+  color: #fff;
+}
+
+.periodo-label {
+  margin-left: 8px;
+  font-size: 0.85rem;
+  color: #6B7280;
+}
+
 /* --- Botões --- */
 
 .botao-primario {
