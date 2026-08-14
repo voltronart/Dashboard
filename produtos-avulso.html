@@ -73,8 +73,10 @@
             <label for="produto-unidade">Unidade</label>
             <input type="text" id="produto-unidade" placeholder="ex: kg, unidade, maço">
 
-            <label for="produto-imagem">URL da imagem</label>
-            <input type="text" id="produto-imagem" placeholder="Opcional">
+            <label for="produto-imagem-arquivo">Foto do produto</label>
+            <input type="file" id="produto-imagem-arquivo" accept="image/*">
+            <img id="produto-imagem-preview" class="imagem-preview escondido" alt="Pré-visualização">
+            <input type="hidden" id="produto-imagem">
 
             <label class="label-checkbox">
                 <input type="checkbox" id="produto-disponivel" checked>
