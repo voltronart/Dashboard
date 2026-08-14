@@ -321,6 +321,15 @@ body {
   width: auto;
 }
 
+.imagem-preview {
+  margin-top: 10px;
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #D1D5DB;
+}
+
 .modal-box input {
   padding: 9px 10px;
   border: 1px solid #D1D5DB;
