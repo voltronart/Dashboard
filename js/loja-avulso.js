@@ -6,6 +6,35 @@ let produtoEditandoId = null;
 let produtoParaExcluirId = null;
 let produtosCache = [];
 
+const NOME_BUCKET = "produtos-imagens";
+
+// ==========================================
+// Upload de imagem para o Supabase Storage
+// ==========================================
+// Recebe o arquivo escolhido pelo usuário, sobe pro bucket
+// "produtos-imagens" e retorna a URL pública gerada.
+async function fazerUploadImagem(arquivo) {
+  const extensao = arquivo.name.split(".").pop();
+  const nomeArquivo = `produto-${Date.now()}.${extensao}`;
+
+  const { error: erroUpload } = await supabaseClient.storage
+    .from(NOME_BUCKET)
+    .upload(nomeArquivo, arquivo, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (erroUpload) {
+    throw new Error("Erro ao enviar imagem: " + erroUpload.message);
+  }
+
+  const { data } = supabaseClient.storage
+    .from(NOME_BUCKET)
+    .getPublicUrl(nomeArquivo);
+
+  return data.publicUrl;
+}
+
 // --- Proteção de rota ---
 async function verificarSessao() {
   const { data: { session } } = await supabaseClient.auth.getSession();
@@ -73,11 +102,34 @@ function renderizarGrid(lista) {
   });
 }
 
+// --- Preview da imagem escolhida ---
+function configurarPreviewImagem() {
+  const inputArquivo = document.getElementById("produto-imagem-arquivo");
+  const preview = document.getElementById("produto-imagem-preview");
+
+  inputArquivo.addEventListener("change", () => {
+    const arquivo = inputArquivo.files[0];
+    if (!arquivo) {
+      preview.classList.add("escondido");
+      return;
+    }
+
+    const leitor = new FileReader();
+    leitor.onload = (e) => {
+      preview.src = e.target.result;
+      preview.classList.remove("escondido");
+    };
+    leitor.readAsDataURL(arquivo);
+  });
+}
+
 // --- Modal: novo / editar ---
 function abrirModalNovo() {
   produtoEditandoId = null;
   document.getElementById("form-produto").reset();
   document.getElementById("produto-disponivel").checked = true;
+  document.getElementById("produto-imagem").value = "";
+  document.getElementById("produto-imagem-preview").classList.add("escondido");
   document.getElementById("modal-produto-titulo").textContent = "Novo Produto";
   document.getElementById("modalProduto").classList.remove("escondido");
 }
@@ -93,6 +145,16 @@ function abrirModalEdicao(id) {
   document.getElementById("produto-preco").value = item.preco;
   document.getElementById("produto-unidade").value = item.unidade || "";
   document.getElementById("produto-imagem").value = item.imagem_url || "";
+  document.getElementById("produto-imagem-arquivo").value = "";
+
+  const preview = document.getElementById("produto-imagem-preview");
+  if (item.imagem_url) {
+    preview.src = item.imagem_url;
+    preview.classList.remove("escondido");
+  } else {
+    preview.classList.add("escondido");
+  }
+
   document.getElementById("produto-disponivel").checked = !!item.disponivel;
 
   document.getElementById("modal-produto-titulo").textContent = "Editar Produto";
@@ -108,36 +170,60 @@ function fecharModalProduto() {
 async function salvarProduto(event) {
   event.preventDefault();
 
-  const payload = {
-    nome: document.getElementById("produto-nome").value.trim(),
-    descricao: document.getElementById("produto-descricao").value.trim() || null,
-    preco: parseFloat(document.getElementById("produto-preco").value) || 0,
-    unidade: document.getElementById("produto-unidade").value.trim() || null,
-    imagem_url: document.getElementById("produto-imagem").value.trim() || null,
-    disponivel: document.getElementById("produto-disponivel").checked,
-  };
+  const botaoSalvar = document.querySelector("#form-produto button[type='submit']");
+  const inputArquivo = document.getElementById("produto-imagem-arquivo");
+  const arquivoSelecionado = inputArquivo.files[0];
 
-  let error;
+  botaoSalvar.disabled = true;
+  botaoSalvar.textContent = "Salvando...";
 
-  if (produtoEditandoId) {
-    ({ error } = await supabaseClient
-      .from("produtos_avulso")
-      .update(payload)
-      .eq("id", produtoEditandoId));
-  } else {
-    ({ error } = await supabaseClient
-      .from("produtos_avulso")
-      .insert([payload]));
+  try {
+    // Se uma nova imagem foi escolhida, faz upload primeiro e pega a URL gerada.
+    // Se não escolheu nenhuma nova, mantém a URL que já estava (útil ao editar).
+    let imagemUrl = document.getElementById("produto-imagem").value.trim() || null;
+
+    if (arquivoSelecionado) {
+      imagemUrl = await fazerUploadImagem(arquivoSelecionado);
+    }
+
+    const payload = {
+      nome: document.getElementById("produto-nome").value.trim(),
+      descricao: document.getElementById("produto-descricao").value.trim() || null,
+      preco: parseFloat(document.getElementById("produto-preco").value) || 0,
+      unidade: document.getElementById("produto-unidade").value.trim() || null,
+      imagem_url: imagemUrl,
+      disponivel: document.getElementById("produto-disponivel").checked,
+    };
+
+    let error;
+
+    if (produtoEditandoId) {
+      ({ error } = await supabaseClient
+        .from("produtos_avulso")
+        .update(payload)
+        .eq("id", produtoEditandoId));
+    } else {
+      ({ error } = await supabaseClient
+        .from("produtos_avulso")
+        .insert([payload]));
+    }
+
+    if (error) {
+      console.error("Erro ao salvar produto avulso:", error);
+      alert("Erro ao salvar: " + error.message);
+      return;
+    }
+
+    fecharModalProduto();
+    await carregarProdutos();
+
+  } catch (erro) {
+    console.error("Erro ao salvar produto:", erro);
+    alert(erro.message);
+  } finally {
+    botaoSalvar.disabled = false;
+    botaoSalvar.textContent = "Salvar";
   }
-
-  if (error) {
-    console.error("Erro ao salvar produto avulso:", error);
-    alert("Erro ao salvar: " + error.message);
-    return;
-  }
-
-  fecharModalProduto();
-  await carregarProdutos();
 }
 
 // --- Apagar (com modal de confirmação, sem usar confirm() do navegador) ---
@@ -179,6 +265,7 @@ function formatarPreco(valor) {
 document.addEventListener("DOMContentLoaded", async () => {
   await verificarSessao();
   await carregarProdutos();
+  configurarPreviewImagem();
 
   document.getElementById("btn-novo-produto").addEventListener("click", abrirModalNovo);
   document.getElementById("btn-cancelar-produto").addEventListener("click", fecharModalProduto);
