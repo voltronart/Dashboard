@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Produtos Avulso</title>
+
+    <link rel="stylesheet" href="css/produtos-avulso.css">
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-topo">
+        <h2>Jogi Hortaliças</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="clientes.html" class="nav-link">Clientes</a>
+        <a href="produtos.html" class="nav-link">Produtos</a>
+        <a href="produtos-avulso.html" class="nav-link ativo">Produtos Avulso</a>
+        <a href="pedidos.html" class="nav-link">Pedidos</a>
+        <a href="financeiro.html" class="nav-link">Financeiro</a>
+      </nav>
+      <div class="sidebar-rodape">
+        <button id="btn-logout" class="nav-link">Sair</button>
+      </div>
+    </aside>
+
+    <main class="conteudo">
+
+        <header class="conteudo-header">
+            <div>
+                <h1>Produtos Avulso</h1>
+                <p>Catálogo exibido no cardápio de clientes avulsos.</p>
+            </div>
+            <div class="header-acoes">
+                <button class="botao-primario" id="btn-novo-produto">
+                    Novo Produto
+                </button>
+            </div>
+        </header>
+
+        <section class="grid-produtos-admin" id="grid-produtos-admin">
+            <!-- cards gerados via JS -->
+        </section>
+
+    </main>
+
+</div>
+
+<!-- MODAL: novo/editar produto -->
+<div class="modal-overlay escondido" id="modalProduto">
+    <div class="modal-box">
+        <h2 id="modal-produto-titulo">Novo Produto</h2>
+
+        <form id="form-produto">
+
+            <label for="produto-nome">Nome</label>
+            <input type="text" id="produto-nome" required>
+
+            <label for="produto-descricao">Descrição</label>
+            <input type="text" id="produto-descricao" placeholder="Opcional">
+
+            <label for="produto-preco">Preço</label>
+            <input type="number" id="produto-preco" step="0.01" required>
+
+            <label for="produto-unidade">Unidade</label>
+            <input type="text" id="produto-unidade" placeholder="ex: kg, unidade, maço">
+
+            <label for="produto-imagem">URL da imagem</label>
+            <input type="text" id="produto-imagem" placeholder="Opcional">
+
+            <label class="label-checkbox">
+                <input type="checkbox" id="produto-disponivel" checked>
+                Disponível no cardápio
+            </label>
+
+            <div class="modal-acoes">
+                <button type="button" class="botao-secundario" id="btn-cancelar-produto">Cancelar</button>
+                <button type="submit" class="botao-primario">Salvar</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: confirmar exclusão -->
+<div class="modal-overlay escondido" id="modalConfirmarExclusaoProduto">
+  <div class="modal-box">
+    <h2>Apagar produto?</h2>
+    <p class="modal-subtitulo">Essa ação não pode ser desfeita.</p>
+    <div class="modal-acoes">
+      <button type="button" class="botao-secundario" id="btn-cancelar-exclusao-produto">Cancelar</button>
+      <button type="button" class="botao-perigo" id="btn-confirmar-exclusao-produto">Apagar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/utils.js"></script>
+<script src="js/supabaseConfig.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/produtos-avulso.js"></script>
+
+</body>
+
+</html>
