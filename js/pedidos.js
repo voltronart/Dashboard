@@ -48,6 +48,42 @@ function formatarItens(itens) {
     .join(", ");
 }
 
+// --- Retorna o nome de exibição, considerando restaurante ou avulso ---
+function nomeExibicaoPedido(pedido) {
+  if (pedido.cliente_id) {
+    return pedido.clientes?.nome || "Cliente removido";
+  }
+  return pedido.nome_avulso ? `${pedido.nome_avulso} (avulso)` : "Cliente avulso";
+}
+
+// --- Monta um resumo extra pro pedido avulso: telefone, endereço, pagamento ---
+function detalhesExtrasPedido(pedido) {
+  if (pedido.cliente_id) return ""; // pedido de restaurante não usa esses campos
+
+  const linhas = [];
+
+  if (pedido.telefone_avulso) {
+    linhas.push(`📞 ${pedido.telefone_avulso}`);
+  }
+
+  if (pedido.endereco_avulso) {
+    linhas.push(`📍 ${pedido.endereco_avulso}`);
+  }
+
+  if (pedido.forma_pagamento === "pix") {
+    linhas.push(`💳 Pix`);
+  } else if (pedido.forma_pagamento === "dinheiro") {
+    const trocoTexto = pedido.troco_para
+      ? `troco p/ ${formatarPreco(pedido.troco_para)}`
+      : "sem troco";
+    linhas.push(`💵 Dinheiro (${trocoTexto})`);
+  }
+
+  if (linhas.length === 0) return "";
+
+  return `<div class="detalhes-avulso">${linhas.join("<br>")}</div>`;
+}
+
 // --- Traduz o status de pagamento pra exibição ---
 function traduzirStatusPagamento(status) {
   const mapa = {
@@ -90,11 +126,12 @@ function renderizarTabela(pedidos) {
   }
 
   pedidos.forEach((pedido) => {
-    const nomeCliente = pedido.clientes?.nome || "Cliente removido";
+    const nomeCliente = nomeExibicaoPedido(pedido);
+    const extras = detalhesExtrasPedido(pedido);
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td data-label>${nomeCliente}</td>
+      <td data-label>${nomeCliente}${extras}</td>
       <td data-label>${formatarData(pedido.created_at)}</td>
       <td data-label>${formatarItens(pedido.itens)}</td>
       <td data-label>${formatarPreco(pedido.total)}</td>
