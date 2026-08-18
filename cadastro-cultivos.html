@@ -108,6 +108,37 @@
   <script src="js/supabaseClient.js"></script>
   <script src="js/auth.js"></script>
 <script type="module" src="./js/cultivos.js"></script>
+
+     <script>
+  const btnMenu = document.getElementById('btn-menu');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay-menu');
+
+  function abrirMenu() {
+    sidebar.classList.add('aberta');
+    overlay.classList.add('visivel');
+  }
+
+  function fecharMenu() {
+    sidebar.classList.remove('aberta');
+    overlay.classList.remove('visivel');
+  }
+
+  if (btnMenu && sidebar && overlay) {
+    btnMenu.addEventListener('click', () => {
+      const aberto = sidebar.classList.contains('aberta');
+      aberto ? fecharMenu() : abrirMenu();
+    });
+
+    overlay.addEventListener('click', fecharMenu);
+
+    document.querySelectorAll('.sidebar a, .sidebar button').forEach((item) => {
+      item.addEventListener('click', () => {
+        if (window.innerWidth <= 768) fecharMenu();
+      });
+    });
+  }
+</script>
     
 </body>
 </html>
