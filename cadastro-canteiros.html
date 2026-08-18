@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hortaliças JOGI — Cadastro de Canteiros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide-static/0.383.0/umd/lucide-static.min.js"></script>
+<link rel="stylesheet" href="../css/estilo.css">
+<link rel="stylesheet" href="../css/canteiros.css">
+</head>
+<body>
+
+<div class="app-layout">
+  <div id="sidebar-slot"></div>
+
+  <div class="content-area">
+    <header>
+      <div class="header-inner">
+        <div class="brand">
+          <div>
+            <div class="eyebrow">Produção</div>
+            <h1>Cadastro de Canteiros</h1>
+          </div>
+        </div>
+        <button class="btn-new" id="btn-novo">
+          <i data-lucide="plus" size="18"></i> Novo canteiro
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div class="alert" id="alerta"></div>
+
+      <div class="toolbar">
+        <div class="search-row">
+          <i data-lucide="search" size="18" color="#7A6F52"></i>
+          <input id="busca" placeholder="Buscar por número..." />
+        </div>
+        <select class="filtro-status" id="filtro-status">
+          <option value="">Todos os status</option>
+          <option value="Livre">Livre</option>
+          <option value="Em preparo">Em preparo</option>
+          <option value="Ocupado">Ocupado</option>
+          <option value="Em descanso">Em descanso</option>
+        </select>
+      </div>
+
+      <div id="estado-carregando" class="sg">Carregando canteiros...</div>
+      <div id="estado-vazio">
+        <i data-lucide="layout-grid" size="36" style="opacity:0.4;margin-bottom:12px;"></i>
+        <p class="sg" id="texto-vazio" style="font-size:15px;"></p>
+      </div>
+      <div class="lista" id="lista"></div>
+
+      <p class="contagem sg" id="contagem"></p>
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <form class="modal" id="form-canteiro">
+    <div class="modal-head">
+      <h2 id="modal-titulo">Novo canteiro</h2>
+      <button type="button" class="close-btn" id="btn-fechar"><i data-lucide="x" size="20" color="#7A6F52"></i></button>
+    </div>
+
+    <div class="grid">
+      <label class="campo">Número / identificação *<div><input required id="f-numero" placeholder="Ex: C-01" /></div></label>
+      <label class="campo">Área (m²)<div><input type="number" min="0" step="0.1" id="f-area" placeholder="Ex: 12" /></div></label>
+      <label class="campo span2">Cultivo atual
+        <div>
+          <select id="f-cultivo">
+            <option value="">Nenhum / vazio</option>
+          </select>
+        </div>
+      </label>
+      <label class="campo">Data de preparo<div><input type="date" id="f-data-preparo" /></div></label>
+      <label class="campo">Status
+        <div>
+          <select id="f-status">
+            <option>Livre</option>
+            <option>Em preparo</option>
+            <option>Ocupado</option>
+            <option>Em descanso</option>
+          </select>
+        </div>
+      </label>
+      <label class="campo span2">Observações<div><textarea id="f-observacoes" placeholder="Anotações gerais sobre o canteiro"></textarea></div></label>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" id="btn-cancelar">Cancelar</button>
+      <button type="submit" class="btn-save" id="btn-salvar">Salvar canteiro</button>
+    </div>
+  </form>
+</div>
+
+<script type="module" src="../js/canteiros.js"></script>
+</body>
+</html>

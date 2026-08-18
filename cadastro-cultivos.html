@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hortaliças JOGI — Cadastro de Cultivos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide-static/0.383.0/umd/lucide-static.min.js"></script>
+<link rel="stylesheet" href="../css/estilo.css">
+<link rel="stylesheet" href="../css/cultivos.css">
+</head>
+<body>
+
+<div class="app-layout">
+  <div id="sidebar-slot"></div>
+
+  <div class="content-area">
+    <header>
+      <div class="header-inner">
+        <div class="brand">
+          <div>
+            <div class="eyebrow">Produção</div>
+            <h1>Cadastro de Cultivos</h1>
+          </div>
+        </div>
+        <button class="btn-new" id="btn-novo">
+          <i data-lucide="plus" size="18"></i> Novo cultivo
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div class="alert" id="alerta"></div>
+
+      <div class="search-row">
+        <i data-lucide="search" size="18" color="#7A6F52"></i>
+        <input id="busca" placeholder="Buscar por nome ou variedade..." />
+      </div>
+
+      <div id="estado-carregando" class="sg">Carregando cultivos...</div>
+      <div id="estado-vazio">
+        <i data-lucide="leaf" size="36" style="opacity:0.4;margin-bottom:12px;"></i>
+        <p class="sg" id="texto-vazio" style="font-size:15px;"></p>
+      </div>
+      <div class="lista" id="lista"></div>
+
+      <p class="contagem sg" id="contagem"></p>
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <form class="modal" id="form-cultivo">
+    <div class="modal-head">
+      <h2 id="modal-titulo">Novo cultivo</h2>
+      <button type="button" class="close-btn" id="btn-fechar"><i data-lucide="x" size="20" color="#7A6F52"></i></button>
+    </div>
+
+    <div class="grid">
+      <label class="campo span2">Nome da cultura *<div><input required id="f-nome" placeholder="Ex: Alface" /></div></label>
+      <label class="campo">Variedade<div><input id="f-variedade" placeholder="Ex: Crespa" /></div></label>
+      <label class="campo">Ciclo (dias até colheita)<div><input type="number" min="0" id="f-ciclo" placeholder="Ex: 45" /></div></label>
+      <label class="campo">Época ideal de plantio<div><input id="f-epoca" placeholder="Ex: Ano todo" /></div></label>
+      <label class="campo">Espaçamento<div><input id="f-espacamento" placeholder="Ex: 25x25cm" /></div></label>
+      <label class="campo">Plantas por canteiro<div><input type="number" min="0" id="f-plantas" placeholder="Ex: 120" /></div></label>
+      <label class="campo">Produtividade média<div><input id="f-produtividade" placeholder="Ex: 2kg/canteiro" /></div></label>
+      <label class="campo">Necessidade de irrigação
+        <div>
+          <select id="f-irrigacao">
+            <option>Baixa</option>
+            <option selected>Média</option>
+            <option>Alta</option>
+          </select>
+        </div>
+      </label>
+      <label class="campo span2">Adubação<div><input id="f-adubacao" placeholder="Ex: Esterco curtido + NPK" /></div></label>
+      <label class="campo span2">Principais pragas e doenças<div><input id="f-pragas" placeholder="Ex: Pulgão, míldio" /></div></label>
+      <label class="campo span2">Época de maior procura / melhor preço<div><input id="f-preco" placeholder="Ex: Verão" /></div></label>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" id="btn-cancelar">Cancelar</button>
+      <button type="submit" class="btn-save" id="btn-salvar">Salvar cultivo</button>
+    </div>
+  </form>
+</div>
+
+<script type="module" src="../js/cultivos.js"></script>
+</body>
+</html>
