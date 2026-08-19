@@ -1,0 +1,121 @@
+/* ==========================================================
+   CULTIVOS — estilo do card específico
+   ========================================================== */
+
+.card-cultivo {
+  background: var(--creme-card);
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-cultivo-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.card-cultivo-nome {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--musgo-escuro);
+  margin: 0;
+}
+
+.card-cultivo-variedade {
+  font-size: 0.82rem;
+  color: var(--tinta-suave);
+  margin: 0 0 6px;
+}
+
+.card-cultivo-linha {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--tinta);
+  padding: 4px 0;
+  border-top: 1px dashed var(--borda);
+}
+
+.card-cultivo-linha span:first-child {
+  color: var(--tinta-suave);
+}
+
+.badge-irrigacao {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-irrigacao.Baixa {
+  background: #E0F2FE;
+  color: #0369A1;
+}
+
+.badge-irrigacao.Média {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.badge-irrigacao.Alta {
+  background: #DBEAFE;
+  color: #1D4ED8;
+}
+
+.card-cultivo-acoes {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.card-cultivo-acoes button {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: var(--musgo-medio);
+}
+
+.card-cultivo-acoes .btn-excluir {
+  color: var(--vermelho);
+}
+
+@media (max-width: 720px) {
+  .card-cultivo {
+    padding: 12px 14px;
+    gap: 4px;
+  }
+
+  .card-cultivo-nome {
+    font-size: 0.92rem;
+  }
+
+  .card-cultivo-variedade {
+    font-size: 0.74rem;
+  }
+
+  .card-cultivo-linha {
+    font-size: 0.72rem;
+    padding: 3px 0;
+  }
+
+  .badge-irrigacao {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+  }
+
+  .card-cultivo-acoes button {
+    font-size: 0.72rem;
+    padding: 3px 6px;
+  }
+}
