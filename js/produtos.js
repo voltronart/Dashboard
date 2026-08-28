@@ -1,10 +1,18 @@
 // ==========================================
-// produtos.js - CRUD de produtos (catálogo geral)
+// produtos.js - CRUD de produtos (catálogo geral) - OTIMIZADO
 // ==========================================
 
 let produtoEditandoId = null;
 let arquivoImagemSelecionado = null;
-let imagemAtualUrl = null; // usado na edição, se não trocar a foto
+let imagemAtualUrl = null;
+
+// --- Configurações de otimização ---
+const CONFIG_IMAGEM = {
+  LARGURA_MAX: 800,      // Reduz imagens maiores que isso
+  ALTURA_MAX: 800,
+  QUALIDADE: 0.8,        // 80% de qualidade (bom equilíbrio)
+  FORMATO: 'image/webp'  // WebP é 25-35% mais leve que JPEG
+};
 
 // --- Proteção de rota ---
 async function verificarSessao() {
@@ -43,7 +51,10 @@ function renderizarTabela(produtos) {
     tr.innerHTML = `
       <td data-label>
         ${produto.imagem_url
-          ? `<img src="${produto.imagem_url}" alt="${produto.nome}" style="width:48px; height:48px; object-fit:cover; border-radius:6px;">`
+          ? `<img src="${produto.imagem_url}" 
+                  alt="${produto.nome}" 
+                  loading="lazy"
+                  style="width:48px; height:48px; object-fit:cover; border-radius:6px;">`
           : "-"}
       </td>
       <td data-label>${produto.nome}</td>
@@ -123,21 +134,74 @@ function fecharModal() {
 
 // --- Preview da imagem escolhida ---
 function configurarPreviewImagem() {
-  document.getElementById("produto-imagem").addEventListener("change", (e) => {
+  document.getElementById("produto-imagem").addEventListener("change", async (e) => {
     const arquivo = e.target.files[0];
     if (!arquivo) return;
 
-    arquivoImagemSelecionado = arquivo;
+    // Comprime a imagem antes de mostrar preview
+    const imagemComprimida = await comprimirImagem(arquivo);
+    arquivoImagemSelecionado = imagemComprimida;
 
     const preview = document.getElementById("preview-imagem");
-    preview.src = URL.createObjectURL(arquivo);
+    preview.src = URL.createObjectURL(imagemComprimida);
     preview.style.display = "block";
+  });
+}
+
+// --- 🎯 NOVO: Compressão de imagem com Canvas ---
+async function comprimirImagem(arquivo) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+      const img = new Image();
+      
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let largura = img.width;
+        let altura = img.height;
+
+        // Calcula proporção mantendo aspect ratio
+        if (largura > CONFIG_IMAGEM.LARGURA_MAX || altura > CONFIG_IMAGEM.ALTURA_MAX) {
+          const proporcao = Math.min(
+            CONFIG_IMAGEM.LARGURA_MAX / largura,
+            CONFIG_IMAGEM.ALTURA_MAX / altura
+          );
+          largura = largura * proporcao;
+          altura = altura * proporcao;
+        }
+
+        canvas.width = largura;
+        canvas.height = altura;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, largura, altura);
+
+        // Converte para WebP comprimido
+        canvas.toBlob(
+          (blob) => {
+            const arquivoComprimido = new File(
+              [blob], 
+              `imagem-${Date.now()}.webp`, 
+              { type: 'image/webp' }
+            );
+            resolve(arquivoComprimido);
+          },
+          CONFIG_IMAGEM.FORMATO,
+          CONFIG_IMAGEM.QUALIDADE
+        );
+      };
+
+      img.src = e.target.result;
+    };
+
+    reader.readAsDataURL(arquivo);
   });
 }
 
 // --- Faz upload da imagem pro Storage e retorna a URL pública ---
 async function fazerUploadImagem(arquivo) {
-  const extensao = arquivo.name.split(".").pop();
+  const extensao = 'webp'; // Sempre WebP
   const nomeArquivo = `${Date.now()}-${Math.random().toString(36).slice(2)}.${extensao}`;
 
   const { error: erroUpload } = await supabaseClient
@@ -168,7 +232,6 @@ async function salvarProduto(event) {
   try {
     let urlImagemFinal = imagemAtualUrl;
 
-    // Se o usuário escolheu uma imagem nova, faz upload primeiro
     if (arquivoImagemSelecionado) {
       urlImagemFinal = await fazerUploadImagem(arquivoImagemSelecionado);
     }
