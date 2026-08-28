@@ -9,19 +9,59 @@ let produtosCache = [];
 const NOME_BUCKET = "produtos-imagens";
 
 // ==========================================
+// Compressão de imagem no navegador (reduz egress do Supabase)
+// ==========================================
+// Redimensiona para no máximo 800px de largura e converte para
+// JPEG com qualidade 75% - reduz o peso do arquivo em até 90%
+// sem perda visível de qualidade em um card de produto.
+async function comprimirImagem(arquivo, larguraMaxima = 800, qualidade = 0.75) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+
+    img.onload = () => {
+      const escala = Math.min(1, larguraMaxima / img.width);
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width * escala;
+      canvas.height = img.height * escala;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            reject(new Error("Falha ao comprimir a imagem"));
+            return;
+          }
+          resolve(blob);
+        },
+        "image/jpeg",
+        qualidade
+      );
+
+      URL.revokeObjectURL(img.src);
+    };
+
+    img.onerror = () => reject(new Error("Não foi possível ler a imagem selecionada"));
+    img.src = URL.createObjectURL(arquivo);
+  });
+}
+
+// ==========================================
 // Upload de imagem para o Supabase Storage
 // ==========================================
-// Recebe o arquivo escolhido pelo usuário, sobe pro bucket
-// "produtos-imagens" e retorna a URL pública gerada.
+// Recebe o arquivo escolhido pelo usuário, comprime, sobe pro
+// bucket "produtos-imagens" e retorna a URL pública gerada.
 async function fazerUploadImagem(arquivo) {
-  const extensao = arquivo.name.split(".").pop();
-  const nomeArquivo = `produto-${Date.now()}.${extensao}`;
+  const imagemComprimida = await comprimirImagem(arquivo);
+  const nomeArquivo = `produto-${Date.now()}.jpg`;
 
   const { error: erroUpload } = await supabaseClient.storage
     .from(NOME_BUCKET)
-    .upload(nomeArquivo, arquivo, {
-      cacheControl: "3600",
+    .upload(nomeArquivo, imagemComprimida, {
+      cacheControl: "604800", // 7 dias - o navegador do cliente reaproveita a imagem sem baixar de novo
       upsert: false,
+      contentType: "image/jpeg",
     });
 
   if (erroUpload) {
