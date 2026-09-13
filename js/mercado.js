@@ -5,6 +5,7 @@
 let entregasCache = [];
 let entregaEditandoId = null;
 let periodoAtual = "mes";
+let produtosCache = [];
 
 async function verificarSessao() {
   const { data: { session } } = await supabaseClient.auth.getSession();
@@ -26,6 +27,55 @@ async function carregarEntregas() {
 
   entregasCache = data || [];
   aplicarFiltro();
+}
+
+
+async function carregarProdutosMercado() {
+  const { data, error } = await supabaseClient
+    .from("produtos")
+    .select("id, nome, unidade, disponivel")
+    .eq("disponivel", true)
+    .order("nome", { ascending: true });
+
+  if (error) {
+    console.error("Erro ao buscar produtos:", error);
+    return;
+  }
+
+  produtosCache = data || [];
+
+  const selectProduto = document.getElementById("mercado-produto");
+
+  selectProduto.innerHTML = `
+    <option value="">Selecione um produto</option>
+  `;
+
+  produtosCache.forEach((produto) => {
+    const option = document.createElement("option");
+
+    option.value = produto.nome;
+    option.textContent = produto.nome;
+
+    selectProduto.appendChild(option);
+  });
+}
+
+function configurarSelecaoProduto() {
+  const selectProduto = document.getElementById("mercado-produto");
+  const campoUnidade = document.getElementById("mercado-unidade");
+
+  selectProduto.addEventListener("change", () => {
+    const produtoSelecionado = produtosCache.find(
+      (produto) => produto.nome === selectProduto.value
+    );
+
+    if (!produtoSelecionado) {
+      campoUnidade.value = "";
+      return;
+    }
+
+    campoUnidade.value = produtoSelecionado.unidade || "";
+  });
 }
 
 function calcularIntervaloPeriodo(periodo) {
@@ -224,15 +274,31 @@ async function apagarEntrega(id) {
 
 document.addEventListener("DOMContentLoaded", async () => {
   await verificarSessao();
+
   configurarFiltro();
+
+  await carregarProdutosMercado();
+
+  configurarSelecaoProduto();
+
   await carregarEntregas();
 
-  document.getElementById("btn-nova-entrega").addEventListener("click", abrirModalNovo);
-  document.getElementById("btn-cancelar-mercado").addEventListener("click", fecharModal);
-  document.getElementById("form-mercado").addEventListener("submit", salvarEntrega);
+  document
+    .getElementById("btn-nova-entrega")
+    .addEventListener("click", abrirModalNovo);
 
-  document.getElementById("btn-logout").addEventListener("click", async () => {
-    await fazerLogout();
-    window.location.href = "index.html";
-  });
+  document
+    .getElementById("btn-cancelar-mercado")
+    .addEventListener("click", fecharModal);
+
+  document
+    .getElementById("form-mercado")
+    .addEventListener("submit", salvarEntrega);
+
+  document
+    .getElementById("btn-logout")
+    .addEventListener("click", async () => {
+      await fazerLogout();
+      window.location.href = "index.html";
+    });
 });
