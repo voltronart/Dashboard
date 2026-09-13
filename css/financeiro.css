@@ -149,6 +149,44 @@ body {
   color: #6B7280;
 }
 
+.bloco-data-personalizada {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+.bloco-data-personalizada label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bloco-data-personalizada input {
+  padding: 7px 10px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.secao-recebimento {
+  margin-bottom: 20px;
+  padding: 18px 20px;
+}
+
+.secao-titulo {
+  font-size: 1rem;
+  margin: 0 0 12px;
+  color: #1F2937;
+}
+
 /* --- Botões --- */
 
 .botao-primario {

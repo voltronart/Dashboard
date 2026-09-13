@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendas por Produto</title>
+    <link rel="stylesheet" href="css/financeiro.css">
+    <link rel="stylesheet" href="css/vendas-produto.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-topo">
+        <h2>Jogi Hortaliças</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="clientes.html" class="nav-link">Clientes</a>
+        <a href="produtos.html" class="nav-link">Produtos</a>
+        <a href="produtos-avulso.html" class="nav-link">Produtos Avulso</a>
+        <a href="produtos-sacolao.html" class="nav-link">Produtos Sacolão</a>
+        <a href="pedidos.html" class="nav-link">Pedidos</a>
+        <a href="financeiro.html" class="nav-link">Financeiro</a>
+         <a href="cadastro-canteiros.html" class="nav-link">Canteiros</a>
+        <a href="cadastro-cultivos.html" class="nav-link">Cultivos</a>
+        <a href="produtos-sacolao.html" class="nav-link">Produtos Sacolão</a>
+        <a href="vendas-produto.html" class="nav-link ativo">Vendas por Produto</a>
+        <a href="mercado.html" class="nav-link">Mercado</a>
+      </nav>
+      <div class="sidebar-rodape">
+        <button id="btn-logout" class="nav-link">Sair</button>
+      </div>
+    </aside>
+
+    <main class="financeiro conteudo">
+
+        <header class="conteudo-header">
+            <div>
+                <h1>Vendas por Produto</h1>
+                <p>Quantidade vendida de cada item, por semana ou mês.</p>
+            </div>
+        </header>
+
+        <section class="filtro-periodo" id="filtro-periodo">
+            <button class="botao-periodo ativo" data-periodo="semana">Esta semana</button>
+            <button class="botao-periodo" data-periodo="mes">Este mês</button>
+            <button class="botao-periodo" data-periodo="tudo">Tudo</button>
+            <span class="periodo-label" id="periodo-label"></span>
+        </section>
+
+        <section class="card">
+            <table class="tabela-padrao">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade vendida</th>
+                        <th>Nº de pedidos</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-vendas-body"></tbody>
+            </table>
+        </section>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/utils.js"></script>
+<script src="js/supabaseConfig.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/vendas-produto.js"></script>
+
+</body>
+
+</html>

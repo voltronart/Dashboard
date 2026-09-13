@@ -1,10 +1,14 @@
 // ==========================================
-// financeiro.js - Com filtro de período (dia / semana / mês / tudo)
+// financeiro.js - Com filtro de período + data personalizada
+// + relatório de recebimento por cliente
 // ==========================================
 
 let movimentacaoEditandoId = null;
 let movimentacoesCache = [];
-let periodoAtual = "mes"; // "dia" | "semana" | "mes" | "tudo"
+let pedidosCache = [];
+let periodoAtual = "mes"; // "dia" | "semana" | "mes" | "tudo" | "personalizado"
+let dataInicioPersonalizada = null;
+let dataFimPersonalizada = null;
 
 // --- Proteção de rota ---
 async function verificarSessao() {
@@ -30,12 +34,26 @@ async function carregarMovimentacoes() {
   aplicarFiltroPeriodo();
 }
 
+// --- Buscar pedidos (para o relatório de recebimento por cliente) ---
+async function carregarPedidosParaRelatorio() {
+  const { data, error } = await supabaseClient
+    .from("pedidos")
+    .select("*, clientes(nome)")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Erro ao buscar pedidos:", error);
+    return;
+  }
+
+  pedidosCache = data || [];
+  renderizarRecebimentoPorCliente();
+}
+
 // ==========================================
 // Filtro de período
 // ==========================================
 
-// Retorna { inicio: Date, fim: Date } para o período selecionado,
-// ou null quando o período é "tudo" (sem filtro).
 function calcularIntervaloPeriodo(periodo) {
   const agora = new Date();
   const hoje = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
@@ -48,8 +66,7 @@ function calcularIntervaloPeriodo(periodo) {
   }
 
   if (periodo === "semana") {
-    // Semana começando na segunda-feira
-    const diaSemana = hoje.getDay(); // 0 = domingo
+    const diaSemana = hoje.getDay();
     const deslocamento = diaSemana === 0 ? 6 : diaSemana - 1;
     const inicio = new Date(hoje);
     inicio.setDate(inicio.getDate() - deslocamento);
@@ -64,17 +81,28 @@ function calcularIntervaloPeriodo(periodo) {
     return { inicio, fim };
   }
 
+  if (periodo === "personalizado" && dataInicioPersonalizada && dataFimPersonalizada) {
+    const inicio = new Date(dataInicioPersonalizada + "T00:00:00");
+    const fim = new Date(dataFimPersonalizada + "T00:00:00");
+    fim.setDate(fim.getDate() + 1); // inclui o dia final inteiro
+    return { inicio, fim };
+  }
+
   // "tudo"
   return null;
 }
 
-function filtrarPorPeriodo(lista, periodo) {
+function filtrarPorPeriodo(lista, periodo, campoData) {
   const intervalo = calcularIntervaloPeriodo(periodo);
   if (!intervalo) return lista;
 
-  return lista.filter((m) => {
-    const dataMov = new Date(m.data_movimentacao + "T00:00:00");
-    return dataMov >= intervalo.inicio && dataMov < intervalo.fim;
+  return lista.filter((item) => {
+    const valorData = item[campoData];
+    if (!valorData) return false;
+    const data = campoData === "data_movimentacao"
+      ? new Date(valorData + "T00:00:00")
+      : new Date(valorData);
+    return data >= intervalo.inicio && data < intervalo.fim;
   });
 }
 
@@ -95,7 +123,7 @@ function formatarLabelPeriodo(periodo) {
 }
 
 function aplicarFiltroPeriodo() {
-  const listaFiltrada = filtrarPorPeriodo(movimentacoesCache, periodoAtual);
+  const listaFiltrada = filtrarPorPeriodo(movimentacoesCache, periodoAtual, "data_movimentacao");
   renderizarResumo(listaFiltrada);
   renderizarTabela(listaFiltrada);
 
@@ -103,10 +131,13 @@ function aplicarFiltroPeriodo() {
   if (label) {
     label.textContent = formatarLabelPeriodo(periodoAtual);
   }
+
+  renderizarRecebimentoPorCliente();
 }
 
 function configurarFiltroPeriodo() {
   const botoes = document.querySelectorAll(".botao-periodo");
+  const blocoPersonalizado = document.getElementById("bloco-data-personalizada");
 
   botoes.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -115,8 +146,81 @@ function configurarFiltroPeriodo() {
       botoes.forEach((b) => b.classList.remove("ativo"));
       btn.classList.add("ativo");
 
-      aplicarFiltroPeriodo();
+      if (periodoAtual === "personalizado") {
+        blocoPersonalizado.classList.remove("escondido");
+      } else {
+        blocoPersonalizado.classList.add("escondido");
+        aplicarFiltroPeriodo();
+      }
     });
+  });
+
+  document.getElementById("btn-aplicar-data").addEventListener("click", () => {
+    const inicio = document.getElementById("data-inicio").value;
+    const fim = document.getElementById("data-fim").value;
+
+    if (!inicio || !fim) {
+      alert("Selecione a data inicial e a data final.");
+      return;
+    }
+
+    if (inicio > fim) {
+      alert("A data inicial não pode ser depois da data final.");
+      return;
+    }
+
+    dataInicioPersonalizada = inicio;
+    dataFimPersonalizada = fim;
+    aplicarFiltroPeriodo();
+  });
+}
+
+// ==========================================
+// Recebimento por cliente
+// ==========================================
+function renderizarRecebimentoPorCliente() {
+  const corpo = document.getElementById("tabela-recebimento-body");
+  if (!corpo) return;
+
+  const pedidosFiltrados = filtrarPorPeriodo(pedidosCache, periodoAtual, "created_at")
+    .filter((p) => p.status !== "cancelado");
+
+  // agrupa por nome do cliente (restaurante ou avulso/sacolão)
+  const agrupado = {};
+
+  pedidosFiltrados.forEach((pedido) => {
+    let chave;
+    if (pedido.cliente_id) {
+      chave = pedido.clientes?.nome || "Cliente removido";
+    } else {
+      const origem = pedido.origem === "sacolao" ? "sacolão" : "avulso";
+      chave = `${pedido.nome_avulso || "Cliente avulso"} (${origem})`;
+    }
+
+    if (!agrupado[chave]) {
+      agrupado[chave] = { total: 0, pedidos: 0 };
+    }
+    agrupado[chave].total += Number(pedido.total);
+    agrupado[chave].pedidos += 1;
+  });
+
+  const linhas = Object.entries(agrupado).sort((a, b) => b[1].total - a[1].total);
+
+  corpo.innerHTML = "";
+
+  if (linhas.length === 0) {
+    corpo.innerHTML = `<tr><td colspan="3">Nenhum pedido neste período.</td></tr>`;
+    return;
+  }
+
+  linhas.forEach(([nome, dados]) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${nome}</td>
+      <td>${dados.pedidos}</td>
+      <td>${formatarPreco(dados.total)}</td>
+    `;
+    corpo.appendChild(tr);
   });
 }
 
@@ -234,8 +338,6 @@ async function salvarMovimentacao(event) {
     status: document.getElementById("mov-status").value,
   };
 
-  // Só inclui a data se o campo existir no formulário
-  // (evita quebrar caso a coluna data_movimentacao tenha um default no banco)
   if (campoData && campoData.value) {
     payload.data_movimentacao = campoData.value;
   }
@@ -282,11 +384,17 @@ async function apagarMovimentacao(id) {
   await carregarMovimentacoes();
 }
 
+// --- Utilitário ---
+function formatarPreco(valor) {
+  return Number(valor).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
 // --- Inicialização ---
 document.addEventListener("DOMContentLoaded", async () => {
   await verificarSessao();
   configurarFiltroPeriodo();
   await carregarMovimentacoes();
+  await carregarPedidosParaRelatorio();
 
   document.getElementById("btn-nova-movimentacao").addEventListener("click", abrirModalNovo);
   document.getElementById("btn-cancelar-movimentacao").addEventListener("click", fecharModal);

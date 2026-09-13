@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado</title>
+    <link rel="stylesheet" href="css/financeiro.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-topo">
+        <h2>Jogi Hortaliças</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="clientes.html" class="nav-link">Clientes</a>
+        <a href="produtos.html" class="nav-link ">Produtos</a>
+        <a href="pedidos.html" class="nav-link">Pedidos</a>
+        <a href="financeiro.html" class="nav-link">Financeiro</a>
+        <a href="produtos-avulso.html" class="nav-link">Produtos Avulso</a>
+        <a href="cadastro-canteiros.html" class="nav-link">Canteiros</a>
+        <a href="cadastro-cultivos.html" class="nav-link">Cultivos</a>
+        <a href="produtos-sacolao.html" class="nav-link">Produtos Sacolão</a>
+        <a href="vendas-produto.html" class="nav-link">Vendas por Produto</a>
+        <a href="mercado.html" class="nav-link ativo">Mercado</a>
+      </nav>
+      </nav>
+      <div class="sidebar-rodape">
+        <button id="btn-logout" class="nav-link">Sair</button>
+      </div>
+    </aside>
+
+    <main class="financeiro conteudo">
+
+        <header class="conteudo-header">
+            <div>
+                <h1>Mercado</h1>
+                <p>Controle de peças entregues ao mercado.</p>
+            </div>
+            <div class="header-acoes">
+                <button class="botao-primario" id="btn-nova-entrega">Nova Entrega</button>
+            </div>
+        </header>
+
+        <section class="cards-financeiro">
+            <article class="card">
+                <div class="card-titulo">Total entregue (período)</div>
+                <div class="card-valor" id="resumo-total-quantidade">0</div>
+            </article>
+            <article class="card">
+                <div class="card-titulo">Entregas registradas</div>
+                <div class="card-valor" id="resumo-total-entregas">0</div>
+            </article>
+        </section>
+
+        <section class="filtro-periodo" id="filtro-periodo">
+            <button class="botao-periodo" data-periodo="dia">Diário</button>
+            <button class="botao-periodo" data-periodo="semana">Semanal</button>
+            <button class="botao-periodo ativo" data-periodo="mes">Mensal</button>
+            <button class="botao-periodo" data-periodo="tudo">Tudo</button>
+            <span class="periodo-label" id="periodo-label"></span>
+        </section>
+
+        <section class="card">
+            <table class="tabela-padrao">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Observação</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-mercado-body"></tbody>
+            </table>
+        </section>
+
+    </main>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay escondido" id="modalMercado">
+    <div class="modal-box">
+        <h2 id="modal-mercado-titulo">Nova Entrega</h2>
+        <form id="form-mercado">
+            <label for="mercado-data">Data</label>
+            <input type="date" id="mercado-data" required>
+
+            <label for="mercado-produto">Produto</label>
+            <input type="text" id="mercado-produto" placeholder="Ex: Alface" required>
+
+            <label for="mercado-quantidade">Quantidade</label>
+            <input type="number" id="mercado-quantidade" step="0.01" required>
+
+            <label for="mercado-unidade">Unidade</label>
+            <input type="text" id="mercado-unidade" placeholder="Ex: unidade, kg, maço">
+
+            <label for="mercado-observacao">Observação</label>
+            <input type="text" id="mercado-observacao" placeholder="Opcional">
+
+            <div class="modal-acoes">
+                <button type="button" class="botao-secundario" id="btn-cancelar-mercado">Cancelar</button>
+                <button type="submit" class="botao-primario">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/utils.js"></script>
+<script src="js/supabaseConfig.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/mercado.js"></script>
+
+</body>
+
+</html>

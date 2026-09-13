@@ -14,12 +14,15 @@ function montarSidebar() {
 
   const paginaAtual = window.location.pathname.split("/").pop();
 
-  const links = [
+ const links = [
     { href: "clientes.html", label: "Clientes" },
     { href: "produtos.html", label: "Produtos" },
     { href: "produtos-avulso.html", label: "Produtos Avulso" },
+    { href: "produtos-sacolao.html", label: "Produtos Sacolão" },
     { href: "pedidos.html", label: "Pedidos" },
     { href: "financeiro.html", label: "Financeiro" },
+    { href: "vendas-produto.html", label: "Vendas por Produto" },
+    { href: "mercado.html", label: "Mercado" },
     { href: "cadastro-cultivos.html", label: "Cultivos" },
     { href: "cadastro-canteiros.html", label: "Canteiros" },
   ];
