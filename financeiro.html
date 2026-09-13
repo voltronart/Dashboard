@@ -22,16 +22,15 @@
       </div>
       <nav class="sidebar-nav">
         <a href="clientes.html" class="nav-link">Clientes</a>
-        <a href="produtos.html" class="nav-link ">Produtos</a>
+        <a href="produtos.html" class="nav-link">Produtos</a>
+        <a href="produtos-avulso.html" class="nav-link">Produtos Avulso</a>
+        <a href="produtos-sacolao.html" class="nav-link">Produtos Sacolão</a>
         <a href="pedidos.html" class="nav-link">Pedidos</a>
         <a href="financeiro.html" class="nav-link ativo">Financeiro</a>
-        <a href="produtos-avulso.html" class="nav-link">Produtos Avulso</a>
-        <a href="cadastro-canteiros.html" class="nav-link">Canteiros</a>
-        <a href="cadastro-cultivos.html" class="nav-link">Cultivos</a>
-        <a href="produtos-sacolao.html" class="nav-link">Produtos Sacolão</a>
         <a href="vendas-produto.html" class="nav-link">Vendas por Produto</a>
         <a href="mercado.html" class="nav-link">Mercado</a>
-      </nav>
+        <a href="cadastro-cultivos.html" class="nav-link">Cultivos</a>
+        <a href="cadastro-canteiros.html" class="nav-link">Canteiros</a>
       </nav>
       <div class="sidebar-rodape">
         <button id="btn-logout" class="nav-link">Sair</button>
@@ -67,9 +66,18 @@
         <button class="botao-periodo" data-periodo="semana">Semanal</button>
         <button class="botao-periodo ativo" data-periodo="mes">Mensal</button>
         <button class="botao-periodo" data-periodo="tudo">Tudo</button>
+        <button class="botao-periodo" data-periodo="personalizado">Personalizado</button>
 
         <span class="periodo-label" id="periodo-label"></span>
 
+    </section>
+
+    <!-- BLOCO DE DATA PERSONALIZADA (só aparece ao clicar em "Personalizado") -->
+
+    <section class="bloco-data-personalizada escondido" id="bloco-data-personalizada">
+        <label>De: <input type="date" id="data-inicio"></label>
+        <label>Até: <input type="date" id="data-fim"></label>
+        <button class="botao-primario" id="btn-aplicar-data">Aplicar</button>
     </section>
 
     <!-- RESUMO -->
@@ -124,6 +132,22 @@
 
         </article>
 
+    </section>
+
+    <!-- RECEBIMENTO POR CLIENTE -->
+
+    <section class="card secao-recebimento">
+        <h2 class="secao-titulo">Recebimento por cliente</h2>
+        <table class="tabela-padrao">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Pedidos</th>
+                    <th>Total recebido</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-recebimento-body"></tbody>
+        </table>
     </section>
 
     <!-- TABELA -->
@@ -234,6 +258,6 @@ id="modalFinanceiro">
 <script src="js/auth.js"></script>
 <script src="js/financeiro.js"></script>
 
-</body>         
+</body>
 
 </html>
