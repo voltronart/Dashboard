@@ -217,93 +217,50 @@
 
         <form id="form-mercado">
 
-            <!-- DATA -->
+  <label for="mercado-data">Data</label>
+  <input type="date" id="mercado-data" required>
 
-            <label for="mercado-data">
-                Data
-            </label>
+  <label>Produtos da entrega</label>
 
-            <input
-                type="date"
-                id="mercado-data"
-                required>
+  <div id="lista-produtos-entrega" class="lista-produtos-entrega">
+    <!-- Os produtos serão adicionados pelo JavaScript -->
+  </div>
 
+  <button
+    type="button"
+    class="botao-secundario"
+    id="btn-adicionar-produto-entrega"
+  >
+    + Adicionar produto
+  </button>
 
-            <!-- PRODUTO -->
+  <label for="mercado-observacao">Observação</label>
+  <input
+    type="text"
+    id="mercado-observacao"
+    placeholder="Opcional"
+  >
 
-            <label for="mercado-produto">
-                Produto
-            </label>
+  <div class="modal-acoes">
 
-            <select
-                id="mercado-produto"
-                required>
+    <button
+      type="button"
+      class="botao-secundario"
+      id="btn-cancelar-mercado"
+    >
+      Cancelar
+    </button>
 
-                <option value="">
-                    Selecione um produto
-                </option>
+    <button
+      type="submit"
+      class="botao-primario"
+    >
+      Salvar
+    </button>
 
-            </select>
+  </div>
 
-
-            <!-- QUANTIDADE -->
-
-            <label for="mercado-quantidade">
-                Quantidade
-            </label>
-
-            <input
-                type="number"
-                id="mercado-quantidade"
-                step="0.01"
-                min="0"
-                required>
-
-
-            <!-- UNIDADE -->
-
-            <label for="mercado-unidade">
-                Unidade
-            </label>
-
-            <input
-                type="text"
-                id="mercado-unidade"
-                placeholder="Ex: unidade, kg, maço">
-
-
-            <!-- OBSERVAÇÃO -->
-
-            <label for="mercado-observacao">
-                Observação
-            </label>
-
-            <input
-                type="text"
-                id="mercado-observacao"
-                placeholder="Opcional">
-
-
-            <!-- AÇÕES -->
-
-            <div class="modal-acoes">
-
-                <button
-                    type="button"
-                    class="botao-secundario"
-                    id="btn-cancelar-mercado">
-                    Cancelar
-                </button>
-
-                <button
-                    type="submit"
-                    class="botao-primario">
-                    Salvar
-                </button>
-
-            </div>
-
-        </form>
+</form>
 
     </div>
 
