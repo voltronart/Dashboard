@@ -383,14 +383,14 @@ body {
 .lista-produtos-entrega {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 30px;
   margin-bottom: 15px;
 }
 
 .item-produto-entrega {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr auto;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
   padding: 12px;
   border: 1px solid #ddd;
@@ -413,4 +413,98 @@ body {
   .financeiro {
     padding: 20px;
   }
+}
+
+/* ==========================================================
+   RESPONSIVIDADE - MERCADO
+   ========================================================== */
+
+@media (max-width: 768px) {
+
+  /* ------------------------------------------
+     PRODUTOS DA ENTREGA
+     ------------------------------------------ */
+
+  .lista-produtos-entrega {
+    gap: 10px;
+  }
+
+  .item-produto-entrega {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .item-produto-entrega
+  .mercado-produto-item {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .item-produto-entrega
+  .mercado-quantidade-item {
+    width: 100%;
+  }
+
+  .item-produto-entrega
+  .mercado-unidade-item {
+    width: 100%;
+  }
+
+  .item-produto-entrega
+  .botao-icone {
+    width: 100%;
+    min-height: 42px;
+  }
+
+
+  /* ------------------------------------------
+     BOTÃO ADICIONAR PRODUTO
+     ------------------------------------------ */
+
+  #btn-adicionar-produto-entrega {
+    width: 100%;
+    margin-top: 5px;
+  }
+
+
+  /* ------------------------------------------
+     MODAL
+     ------------------------------------------ */
+
+  .modal-box {
+    width: calc(100% - 30px);
+    max-width: none;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+
+  /* ------------------------------------------
+     CAMPOS DO FORMULÁRIO
+     ------------------------------------------ */
+
+  #form-mercado input,
+  #form-mercado select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+
+  /* ------------------------------------------
+     AÇÕES DO MODAL
+     ------------------------------------------ */
+
+  .modal-acoes {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .modal-acoes button {
+    width: 100%;
+    min-height: 44px;
+  }
+
 }

@@ -838,7 +838,61 @@ function fecharModal() {
     null;
 }
 
+function enviarPedidoWhatsApp(itens, dataEntrega, observacao) {
 
+  const numeroWhatsApp = "556196433209";
+
+  // Formata a data para o padrão brasileiro
+  const dataFormatada =
+    new Date(dataEntrega + "T00:00:00")
+      .toLocaleDateString("pt-BR");
+
+
+  // Monta a lista de produtos
+  const listaProdutos = itens
+    .map((item) => {
+
+      return `• ${item.quantidade} ${item.unidade || ""} — ${item.produto}`;
+
+    })
+    .join("\n");
+
+
+  // Monta a mensagem completa
+  const mensagem = `
+🥬 *HORTALIÇAS JOGI*
+━━━━━━━━━━━━━━━━━━━━
+
+📋 *NOVO PEDIDO*
+
+📅 *Data da entrega:* ${dataFormatada}
+
+*ITENS DO PEDIDO*
+
+${listaProdutos}
+
+${observacao ? `📝 *Observação:*\n${observacao}\n` : ""}
+━━━━━━━━━━━━━━━━━━━━
+Pedido enviado pelo sistema JOGI.
+  `.trim();
+
+
+  // Converte a mensagem para URL
+  const mensagemCodificada =
+    encodeURIComponent(mensagem);
+
+
+  // Cria o endereço do WhatsApp
+  const url =
+    `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
+
+
+  // Abre o WhatsApp
+  window.open(
+    url,
+    "_blank"
+  );
+}
 // ==========================================
 // SALVAR ENTREGA
 // ==========================================
@@ -1062,30 +1116,40 @@ async function salvarEntrega(event) {
   // ========================================
   // TRATAMENTO DE ERRO
   // ========================================
+if (error) {
 
-  if (error) {
+  console.error(
+    "Erro ao salvar entrega:",
+    error
+  );
 
-    console.error(
-      "Erro ao salvar entrega:",
-      error
-    );
+  alert(
+    "Erro ao salvar: " +
+    error.message
+  );
 
-    alert(
-      "Erro ao salvar: " +
-      error.message
-    );
-
-    return;
-  }
+  return;
+}
 
 
-  // ========================================
-  // FINALIZAÇÃO
-  // ========================================
+// ========================================
+// ENVIA O PEDIDO PARA O WHATSAPP
+// ========================================
 
-  fecharModal();
+enviarPedidoWhatsApp(
+  itens,
+  dataEntrega,
+  observacao
+);
 
-  await carregarEntregas();
+
+// ========================================
+// FINALIZAÇÃO
+// ========================================
+
+fecharModal();
+
+await carregarEntregas();
 }
 
 
