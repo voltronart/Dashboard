@@ -375,6 +375,29 @@ body {
   margin-top: 20px;
 }
 
+
+/* ==========================================
+   PRODUTOS DA ENTREGA
+   ========================================== */
+
+.lista-produtos-entrega {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.item-produto-entrega {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
 /* --- Responsivo --- */
 
 @media (max-width: 720px) {
