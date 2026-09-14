@@ -18,7 +18,7 @@ function montarSidebar() {
     { href: "clientes.html", label: "Clientes" },
     { href: "produtos.html", label: "Produtos" },
     { href: "produtos-avulso.html", label: "Produtos Avulso" },
-    { href: "produtos-sacolao.html", label: "Produtos Sacolão" },
+    { href: "sacolao.html", label: "Produtos Sacolão" },
     { href: "pedidos.html", label: "Pedidos" },
     { href: "financeiro.html", label: "Financeiro" },
     { href: "vendas-produto.html", label: "Vendas por Produto" },
